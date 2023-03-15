@@ -1,20 +1,39 @@
 /*
- * РўРµРєСЃС‚ Р·Р°РґР°РЅРёСЏ
- * 7.РћРїСЂРµРґРµР»РёС‚СЊ РєР»Р°СЃСЃ Р”СЂРѕР±СЊ РІ РІРёРґРµ РїР°СЂС‹ (m,n). РљР»Р°СЃСЃ РґРѕР»Р¶РµРЅ СЃРѕРґРµСЂР¶Р°С‚СЊ РЅРµСЃРєРѕР»СЊРєРѕ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂРѕРІ.
- * Р РµР°Р»РёР·РѕРІР°С‚СЊ РјРµС‚РѕРґС‹ РґР»СЏ СЃР»РѕР¶РµРЅРёСЏ, РІС‹С‡РёС‚Р°РЅРёСЏ, СѓРјРЅРѕР¶РµРЅРёСЏ Рё РґРµР»РµРЅРёСЏ РґСЂРѕР±РµР№. РћР±СЉСЏРІРёС‚СЊ РјР°СЃСЃРёРІ РёР· k РґСЂРѕР±РµР№, РІРІРµСЃС‚Рё/РІС‹РІРµСЃС‚Рё Р·РЅР°С‡РµРЅРёСЏ РґР»СЏ РјР°СЃСЃРёРІР° РґСЂРѕР±РµР№.
- * РЎРѕР·РґР°С‚СЊ РјР°СЃСЃРёРІ РѕР±СЉРµРєС‚РѕРІ Рё РїРµСЂРµРґР°С‚СЊ РµРіРѕ РІ РјРµС‚РѕРґ, РєРѕС‚РѕСЂС‹Р№ РёР·РјРµРЅСЏРµС‚ РєР°Р¶РґС‹Р№ СЌР»РµРјРµРЅС‚ РјР°СЃСЃРёРІР° СЃ С‡РµС‚РЅС‹Рј РёРЅРґРµРєСЃРѕРј РїСѓС‚РµРј РґРѕР±Р°РІР»РµРЅРёСЏ СЃР»РµРґСѓСЋС‰РµРіРѕ Р·Р° РЅРёРј СЌР»РµРјРµРЅС‚Р° РјР°СЃСЃРёРІР°.
+ * Текст задания
+ * 7.Определить класс Дробь в виде пары (_numerator,_denominator). Класс должен содержать несколько конструкторов.
+ * Реализовать методы для сложения, вычитания, умножения и деления дробей. Объявить массив из k дробей, ввести/вывести значения для массива дробей.
+ * Создать массив объектов и передать его в метод, который изменяет каждый элемент массива с четным индексом путем добавления следующего за ним элемента массива.
  * */
+
+import java.util.*;
 public class Main {
     public static void main(String[] args) {
-        int multiply = 1;
-        int summary = 0;
+        int k = 5;
+        Decimal[] decimals = new Decimal[k];
+        Scanner scanner = new Scanner(System.in);
 
-        for (int i = 0; i < args.length; i++) {
-            int number = Integer.parseInt(args[i]);
-            summary = summary + number;
-            multiply = multiply * number;
+        for (int i = 0; i < k; i++) {
+            System.out.println("Введите дробь " + (i+1) + " (в формате m/n):");
+            String input = scanner.nextLine();
+            String[] parts = input.split("/");
+            int m = Integer.parseInt(parts[0]);
+            int n = Integer.parseInt(parts[1]);
+            decimals[i] = new Decimal(m, n);
         }
-        System.out.println("РЎСѓРјРјР° " + summary + "\nРџСЂРѕРёР·РІРµРґРµРЅРёРµ " + multiply);
+
+        System.out.println("Массив дробей:");
+        for (int i = 0; i < k; i++) {
+            System.out.println(decimals[i]);
+        }
+
+        for (int i = 0; i < k-1; i += 2) {
+            decimals[i] = decimals[i].add(decimals[i+1]);
+        }
+
+        System.out.println("Измененный массив дробей:");
+        for (int i = 0; i < k; i++) {
+            System.out.println(decimals[i]);
+        }
     }
 }
 
@@ -23,8 +42,9 @@ public class Decimal {
     private int _denominator;
 
     public Decimal(int numerator, int denominator) {
-        this._denominator = denominator;
-        this._numerator = numerator;
+        int nod = nod(numerator, denominator);
+        this._numerator = numerator / nod;
+        this._denominator = denominator / nod;
     }
 
     public Decimal(int numerator) {
@@ -33,11 +53,44 @@ public class Decimal {
     }
 
     public Decimal() {
-        this._denominator = 1;
+        this._denominator = 0;
         this._numerator = 1;
     }
 
-    public static addDecaimals(Decimal firstDecimal, Decimal secondDecimal) {
+    public Decimal add(Decimal newDecimal) {
+        System.out.println("add" + newDecimal);
+        int newNumerator = this._numerator * newDecimal._denominator + newDecimal._numerator * this._denominator;
+        int newDenominator = this._denominator * newDecimal._denominator;
+        return new Decimal(newNumerator, newDenominator);
+    }
 
+    public Decimal subtract(Decimal newDecimal) {
+        int newNumerator = this._numerator * newDecimal._denominator - newDecimal._numerator * this._denominator;
+        int newDenominator = this._denominator * newDecimal._denominator;
+        return new Decimal(newNumerator, newDenominator);
+    }
+
+    public Decimal multiply(Decimal newDecimal) {
+        int newNumerator = this._numerator * newDecimal._numerator;
+        int newDenominator = this._denominator * newDecimal._denominator;
+        return new Decimal(newNumerator, newDenominator);
+    }
+
+    public Decimal divide(Decimal newDecimal) {
+        int newNumerator = this._numerator * newDecimal._denominator;
+        int newDenominator = this._denominator * newDecimal._numerator;
+        return new Decimal(newNumerator, newDenominator);
+    }
+
+    @Override
+    public String toString() {
+        return _numerator + "/" + _denominator;
+    }
+
+    private int nod(int a, int b) {
+        if (b == 0) {
+            return a;
+        }
+        return nod(b, a % b);
     }
 }
