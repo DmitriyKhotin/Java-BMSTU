@@ -17,7 +17,9 @@ public class Main {
         Bud bud = new Bud("green", false, petals);
         Rose rose = new Rose("Red rose", bud);
         System.out.println(rose);
-
+        System.out.println(bud.hashCode());
+        System.out.println(petals[0].hashCode());
+        System.out.println(rose.hashCode());
         rose.bloom();
         System.out.println(rose);
 
