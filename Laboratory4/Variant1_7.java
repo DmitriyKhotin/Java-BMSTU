@@ -56,7 +56,6 @@ public class PublicTransportDirectory {
             return fare;
         }
 
-        @Override
         public String toString() {
             return "Line: " + line + ", Time: " + time + ", Fare: " + fare;
         }
