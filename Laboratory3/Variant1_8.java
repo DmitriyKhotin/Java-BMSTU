@@ -4,6 +4,10 @@
  * Реализовать методы для сложения, вычитания, умножения, деления, присваивания комплексных чисел.
  * Создать два вектора размерности n из комплексных координат. Передать их в метод, который выполнит их сложение.
  * */
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
 public class Main {
     public static void main(String[] args) {
         int n = 5;
@@ -76,9 +80,14 @@ public class Complex {
     }
 
     public Complex divide(Complex other) {
-        double denominator = other.real * other.real + other.imaginary * other.imaginary;
-        double realPart = (this.real * other.real + this.imaginary * other.imaginary) / denominator;
-        double imaginaryPart = (this.imaginary * other.real - this.real * other.imaginary) / denominator;
-        return new Complex(realPart, imaginaryPart);
+        try {
+            double denominator = other.real * other.real + other.imaginary * other.imaginary;
+            double realPart = (this.real * other.real + this.imaginary * other.imaginary) / denominator;
+            double imaginaryPart = (this.imaginary * other.real - this.real * other.imaginary) / denominator;
+            return new Complex(realPart, imaginaryPart);
+        } catch (ArithmeticException e) {
+            System.out.println("Ошибка: ошибка ввода");
+            return new Complex();
+        }
     }
 }

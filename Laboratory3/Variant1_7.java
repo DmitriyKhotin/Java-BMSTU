@@ -6,6 +6,9 @@
  * */
 
 import java.util.*;
+import java.io.*;
+import java.lang.*;
+
 public class Main {
     public static void main(String[] args) {
         int k = 5;
@@ -18,7 +21,12 @@ public class Main {
             String[] parts = input.split("/");
             int m = Integer.parseInt(parts[0]);
             int n = Integer.parseInt(parts[1]);
-            decimals[i] = new Decimal(m, n);
+
+            try {
+                decimals[i] = new Decimal(m, n);
+            } catch (OutOfMemoryError e) {
+                System.out.println("Ошибка: нехватка памяти");
+            }
         }
 
         System.out.println("Массив дробей:");
@@ -58,10 +66,15 @@ public class Decimal {
     }
 
     public Decimal add(Decimal newDecimal) {
-        System.out.println("add" + newDecimal);
-        int newNumerator = this._numerator * newDecimal._denominator + newDecimal._numerator * this._denominator;
-        int newDenominator = this._denominator * newDecimal._denominator;
-        return new Decimal(newNumerator, newDenominator);
+        try {
+            System.out.println("add" + newDecimal);
+            int newNumerator = this._numerator * newDecimal._denominator + newDecimal._numerator * this._denominator;
+            int newDenominator = this._denominator * newDecimal._denominator;
+            return new Decimal(newNumerator, newDenominator);
+        } catch (ArithmeticException e) {
+            System.out.println("Ошибка: ошибка ввода");
+            return new Decimal();
+        }
     }
 
     public Decimal subtract(Decimal newDecimal) {

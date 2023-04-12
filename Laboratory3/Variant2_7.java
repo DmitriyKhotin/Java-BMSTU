@@ -38,7 +38,11 @@ public class Main {
     public static void main(String[] args) {
         Phone[] phoneArray = new Phone[5];
         for (int i = 1; i < 6; i++) {
-            phoneArray[i-1] = new Phone(i, generateRandomSecondName(), generateRandomName(), generateRandomThirdName(), generateRandomStreet(), i*1000 + i*100 + i*11, i*500, i*200, i % 2 == 0 ? 0 : i, i % 2 != 0 ? 0 : i);
+            try {
+                phoneArray[i-1] = new Phone(i, generateRandomSecondName(), generateRandomName(), generateRandomThirdName(), generateRandomStreet(), i*1000 + i*100 + i*11, i*500, i*200, i % 2 == 0 ? 0 : i, i % 2 != 0 ? 0 : i);
+            } catch (PhoneException e) {
+                System.out.println(e.getMessage());
+            }
         }
 
         PhoneBook phoneBook = new PhoneBook(phoneArray);
@@ -73,7 +77,38 @@ public class Phone {
     private double internationalCallDuration;
 
     public Phone(int id, String lastName, String firstName, String middleName, String address,
-                 int creditCardNumber, double debit, double credit, double localCallDuration, double internationalCallDuration) {
+                 int creditCardNumber, double debit, double credit, double localCallDuration, double internationalCallDuration) throws PhoneException {
+        if (id <= 0) {
+            throw new PhoneException("Invalid id: " + id);
+        }
+        if (lastName == null || lastName.isEmpty()) {
+            throw new PhoneException("Surname is null or empty");
+        }
+        if (firstName == null || firstName.isEmpty()) {
+            throw new PhoneException("Name is null or empty");
+        }
+
+        if (middleName == null || middleName.isEmpty()) {
+            throw new PhoneException("Name is null or empty");
+        }
+        if (address == null || address.isEmpty()) {
+            throw new PhoneException("Address is null or empty");
+        }
+        if (creditCardNumber <=0) {
+            throw new PhoneException("Invalid card number");
+        }
+        if (debit < 0) {
+            throw new PhoneException("Invalid debit: " + debit);
+        }
+        if (credit < 0) {
+            throw new PhoneException("Invalid credit: " + credit);
+        }
+        if (localCallDuration < 0) {
+            throw new PhoneException("Invalid local calls time: " + localCallDuration);
+        }
+        if (internationalCallDuration < 0) {
+            throw new PhoneException("Invalid intercity calls time: " + internationalCallDuration);
+        }
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -217,5 +252,16 @@ public class PhoneBook {
         Phone[] result = Arrays.copyOf(phoneArray, phoneArray.length);
         Arrays.sort(result, Comparator.comparing(Phone::getLastName).thenComparing(Phone::getFirstName).thenComparing(Phone::getMiddleName));
         return result;
+    }
+}
+
+class PhoneException extends Throwable {
+    private String message;
+    public PhoneException(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return this.message;
     }
 }

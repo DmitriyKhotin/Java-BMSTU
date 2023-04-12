@@ -1,0 +1,56 @@
+
+
+
+
+
+import java.io.*;
+
+public class RemoveComments {
+    public static void main(String[] args) throws IOException {
+        
+        File dir = new File("C:\\University\\Java-BMSTU\\Laboratory5\\" + "output1");
+        dir.mkdir();
+        File file = new File(dir, "output.txt");
+        file.createNewFile();
+
+        
+        BufferedReader reader = new BufferedReader(new FileReader("C:\\University\\Java-BMSTU\\Laboratory5\\Variant4_8.java"));
+
+        String line = null;
+        StringBuilder sb = new StringBuilder();
+        boolean isMultilineComment = false;
+        while ((line = reader.readLine()) != null) {
+            if (!isMultilineComment) {
+                
+                int commentIndex = line.indexOf("
+                if (commentIndex != -1) {
+                    System.out.println(commentIndex);
+                    line = line.substring(0, commentIndex);
+                }
+
+                
+                int openCommentIndex = line.indexOf("
+
+
+
+
+
+
+");
+                if (closeCommentIndex != -1) {
+                    isMultilineComment = false;
+                    line = line.substring(closeCommentIndex + 2);
+                } else {
+                    line = "";
+                }
+            }
+
+            sb.append(line + "\n");
+        }
+
+        FileWriter writer = new FileWriter(file);
+        writer.write(sb.toString());
+        writer.close();
+        reader.close();
+    }
+}
