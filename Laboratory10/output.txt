@@ -1,0 +1,165 @@
+// 1
+scala> println("Total number of records: " + count)
+Total number of records: 2380
+
+// 2
+scala> regionCounts.show()
++--------------------+-----+
+|              region|count|
++--------------------+-----+
+|       Kaluga Oblast|   28|
+|          Sevastopol|   28|
+|       Ryazan Oblast|   28|
+|     Smolensk Oblast|   28|
+|  Republic of Crimea|   28|
+|   Sverdlovsk Oblast|   28|
+|    Chechen Republic|   28|
+|      Vologda Oblast|   28|
+|      Irkutsk Oblast|   28|
+|       Kurgan Oblast|   28|
+|      Krasnodar Krai|   28|
+|       Rostov Oblast|   28|
+|      Lipetsk Oblast|   28|
+|  Novosibirsk Oblast|   28|
+|Republic of Bashk...|   28|
+|        Kirov Oblast|   28|
+|              Moscow|   28|
+|     Murmansk Oblast|   28|
+|Republic of North...|   28|
+|      Magadan Oblast|   28|
++--------------------+-----+
+only showing top 20 rows
+// 3
+scala> println("Minimum NPG: " + minNPG)
+Minimum NPG: -15.9
+
+scala> println("Maximum NPG: " + maxNPG)
+Maximum NPG: 24.8
+
+// 4
+scala> averageBirthRateByRegion.show()
++--------------------+------------------+
+|              region|average_birth_rate|
++--------------------+------------------+
+|       Kaluga Oblast| 9.589285714285714|
+|          Sevastopol|              12.5|
+|       Ryazan Oblast| 9.096428571428572|
+|     Smolensk Oblast| 9.160714285714288|
+|  Republic of Crimea|              12.1|
+|   Sverdlovsk Oblast|              11.0|
+|    Chechen Republic|25.083333333333332|
+|      Vologda Oblast|10.985714285714286|
+|      Irkutsk Oblast|13.075000000000001|
+|       Kurgan Oblast|11.317857142857141|
+|      Krasnodar Krai|11.135714285714286|
+|       Rostov Oblast|10.032142857142858|
+|      Lipetsk Oblast| 9.692857142857141|
+|  Novosibirsk Oblast|11.096428571428572|
+|Republic of Bashk...|12.464285714285717|
+|        Kirov Oblast| 10.22857142857143|
+|              Moscow|  9.12857142857143|
+|     Murmansk Oblast| 9.885714285714288|
+|Republic of North...|13.117857142857147|
+|      Magadan Oblast|10.832142857142854|
++--------------------+------------------+
+only showing top 20 rows
+
+// 5
+scala> println("Region with minimum death rate: " + minDeathRateRegion)
+Region with minimum death rate: Republic of Ingushetia
+// 6
+scala> gdwSumByYear.show()
++----+------------------+
+|year|         total_gdw|
++----+------------------+
+|2016| 6341.199999999999|
+|2012| 5348.930000000002|
+|2017|           6542.69|
+|2014| 5739.460000000001|
+|2013| 5536.479999999998|
+|2005| 4925.250000000002|
+|2000| 5687.230000000001|
+|2002| 5365.999999999998|
+|2009| 4932.570000000001|
+|1995| 6289.919999999999|
+|2006| 4852.719999999999|
+|2004| 5024.490000000001|
+|2011|           5199.25|
+|1992| 6393.579999999998|
+|2008|4865.6299999999965|
+|1999| 5890.290000000002|
+|1994| 6365.410000000002|
+|1997| 6167.390000000001|
+|2007| 4827.460000000001|
+|1996|           6236.05|
++----+------------------+
+only showing top 20 rows
+// 7
+scala> println("Year with maximum urbanization: " + maxUrbanizationYear)
+Year with maximum urbanization: 2013
+
+scala> println("Year with minimum urbanization: " + minUrbanizationYear)
+Year with minimum urbanization: 1990
+
+// 8
+scala> averageNPGByYear.show()
++----+--------------------+
+|year|         average_npg|
++----+--------------------+
+|2016| 0.08588235294117652|
+|2012| 0.47108433734939753|
+|2017| -0.8529411764705884|
+|2014|  0.5200000000000001|
+|2013|  0.5481927710843374|
+|2005|  -5.232530120481926|
+|2000|  -5.602439024390244|
+|2002|   -5.68780487804878|
+|2009| -1.1481927710843376|
+|1995|  -4.319512195121952|
+|2006|  -4.104819277108435|
+|2004|   -4.74578313253012|
+|2011|-0.29759036144578305|
+|1992|-0.10853658536585362|
+|2008| -1.7734939759036137|
+|1999|  -5.317073170731705|
+|1994|  -4.781481481481484|
+|1997|  -4.067073170731707|
+|2007| -2.3963855421686753|
+|1996|  -4.174390243902442|
++----+--------------------+
+only showing top 20 rows
+
+// 9
+scala> println("Region with maximum birth rate: " + maxBirthRateRegion)
+Region with maximum birth rate: Nizhny Novgorod Oblast
+
+scala> println("Region with minimum birth rate: " + minBirthRateRegion)
+Region with minimum birth rate: Republic of Ingushetia
+
+// 10
+scala> averageDeathRateByYear.show()
++----+------------------+
+|year|average_death_rate|
++----+------------------+
+|2016| 12.95764705882353|
+|2012| 13.36385542168675|
+|2017|12.501176470588234|
+|2014|13.131325301204818|
+|2013|13.126506024096383|
+|2005| 16.08313253012048|
+|2000| 14.92560975609756|
+|2002|15.998780487804876|
+|2009|14.162650602409643|
+|1995|14.341463414634152|
+|2006|15.119277108433733|
+|2004|15.862650602409632|
+|2011|13.532530120481928|
+|1992| 11.58780487804878|
+|2008|14.536144578313253|
+|1999|14.282926829268302|
+|1994|15.009876543209884|
+|1997|13.307317073170733|
+|2007| 14.48915662650602|
+|1996|13.732926829268287|
++----+------------------+
+only showing top 20 rows

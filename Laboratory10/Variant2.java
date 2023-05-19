@@ -1,76 +1,62 @@
-/*
-* 2)	https://www.kaggle.com/dwdkills/russian-demography
-*
-* */
+import org.apache.spark.sql.{SparkSession, functions}
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types.DoubleType
+import org.apache.spark.sql.types.IntegerType
 
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
-import static org.apache.spark.sql.functions.*;
+val spark = SparkSession.builder().appName("Russian Demography").getOrCreate()
+
+val russianDemography = spark.read.option("header", "true").csv("./russian_demography.csv")
 
 // 1 Подсчитать общее количество записей в наборе данных:
-SparkSession spark = SparkSession.builder().appName("Russian Demography").getOrCreate();
+val count = russianDemography.count()
+println("Total number of records: " + count)
 
-Dataset<Row> russianDemography = spark.read().option("header", "true").csv("./russian_demography.csv");
+// 2 Подсчитать количество записей для каждого региона:
+val regionCounts = russianDemography.groupBy("region").agg(functions.count("*").alias("count"))
+regionCounts.show()
 
-long count = russianDemography.count();
+// 3 Найти наибольшее и наименьшее значение столбца "npg":
+val dfWithNPG = russianDemography.withColumn("npg", col("npg").cast(DoubleType))
 
-System.out.println("Total number of records: " + count);
+val minNPG = dfWithNPG.agg(min("npg")).as[Double].first()
+val maxNPG = dfWithNPG.agg(max("npg")).as[Double].first()
+println("Minimum NPG: " + minNPG)
+println("Maximum NPG: " + maxNPG)
 
-//2 Подсчитать количество записей для каждого региона:
-Dataset<Row> regionCounts = russianDemography.groupBy("region").agg(count("*").alias("count"));
+// 4 Рассчитать среднее значение столбца "birth_rate" по регионам:
+val averageBirthRateByRegion = russianDemography.groupBy("region").agg(avg("birth_rate").alias("average_birth_rate"))
+averageBirthRateByRegion.show()
 
-regionCounts.show();
-// 3 Найти наиболее часто встречающийся год рождения:
-Dataset<Row> mostCommonBirthYear = russianDemography.groupBy("birth_year")
-.agg(count("*").alias("count"))
-.orderBy(desc("count"))
-.limit(1);
+// 5 Найти регион с наибольшим и наименьшим значением столбца "death_rate":
+val maxDeathRateRegion = russianDemography.orderBy(desc("death_rate")).select("region").first().getString(0)
+val minDeathRateRegion = russianDemography.orderBy(asc("death_rate")).select("region").first().getString(0)
+println("Region with maximum death rate: " + maxDeathRateRegion)
+println("Region with minimum death rate: " + minDeathRateRegion)
 
-mostCommonBirthYear.show();
-// 4 Найти количество мужчин и женщин в каждом регионе:
-Dataset<Row> genderCountsByRegion = russianDemography.groupBy("region", "gender")
-.agg(count("*").alias("count"))
-.orderBy("region", "gender");
+// 6 Рассчитать суммарное значение столбца "gdw" для каждого года:
+val gdwSumByYear = russianDemography.groupBy("year").agg(sum("gdw").alias("total_gdw"))
+gdwSumByYear.show()
 
-genderCountsByRegion.show();
-// 5 Найти самый популярный месяц рождения:
-Dataset<Row> mostCommonBirthMonth = russianDemography.groupBy("birth_month")
-.agg(count("*").alias("count"))
-.orderBy(desc("count"))
-.limit(1);
+// 7 Найти год с наибольшим и наименьшим значением столбца "urbanization":
+val dfWithYear = russianDemography.withColumn("year", col("year").cast(IntegerType))
 
-mostCommonBirthMonth.show();
-// 6 Найти средний возраст для каждого региона:
-Dataset<Row> averageAgeByRegion = russianDemography.groupBy("region")
-.agg(avg("age").alias("average_age"))
-.orderBy("region");
+val maxUrbanizationYear = dfWithYear.orderBy(desc("urbanization")).select("year").first().getInt(0)
+println("Year with maximum urbanization: " + maxUrbanizationYear)
 
-averageAgeByRegion.show();
+val minUrbanizationYear = dfWithYear.orderBy(asc("urbanization")).select("year").first().getInt(0)
+println("Year with minimum urbanization: " + minUrbanizationYear)
 
-//  7 Найти количество родившихся мужчин и женщин по годам:
-Dataset<Row> genderCountsByYear = russianDemography.groupBy("birth_year", "gender")
-.agg(count("*").alias("count"))
-.orderBy("birth_year", "gender");
+// 8 Рассчитать среднее значение столбца "npg" для каждого года:
+val averageNPGByYear = russianDemography.groupBy("year").agg(avg("npg").alias("average_npg"))
+averageNPGByYear.show()
 
-genderCountsByYear.show();
-// 8 Найти наиболее часто встречающуюся фамилию:
-Dataset<Row> mostCommonSurname = russianDemography.groupBy("surname")
-.agg(count("*").alias("count"))
-.orderBy(desc("count"))
-.limit(1);
+// 9 Найти регион с наибольшим и наименьшим значением столбца "birth_rate":
+val maxBirthRateRegion = russianDemography.orderBy(desc("birth_rate")).select("region").first().getString(0)
+val minBirthRateRegion = russianDemography.orderBy(asc("birth_rate")).select("region").first().getString(0)
+println("Region with maximum birth rate: " + maxBirthRateRegion)
+println("Region with minimum birth rate: " + minBirthRateRegion)
 
-mostCommonSurname.show();
-// 9 Найти количество родившихся в каждом месяце для каждого года:
-Dataset<Row> birthMonthCountsByYear = russianDemography.groupBy("birth_year", "birth_month")
-.agg(count("*").alias("count"))
-.orderBy("birth_year", "birth_month");
+// 10 Рассчитать среднее значение столбца "death_rate" для каждого года:
+val averageDeathRateByYear = russianDemography.groupBy("year").agg(avg("death_rate").alias("average_death_rate"))
+averageDeathRateByYear.show()
 
-birthMonthCountsByYear.show();
-
-// 10 Найти количество родившихся в каждом регионе по годам:
-Dataset<Row> birthYearCountsByRegion = russianDemography.groupBy("region", "birth_year")
-.agg(count("*").alias("count"))
-.orderBy("region", "birth_year");
-
-birthYearCountsByRegion.show();
